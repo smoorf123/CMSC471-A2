@@ -1,0 +1,50 @@
+region,year,female_lfpr,male_lfpr
+World,1990,50.5,80.5
+World,1995,49.8,79.8
+World,2000,49.2,79.1
+World,2005,48.9,78.6
+World,2010,48.7,77.9
+World,2015,48.5,76.8
+World,2017,48.4,76.5
+East Asia & Pacific,1990,66.5,84.3
+East Asia & Pacific,1995,65.2,83.1
+East Asia & Pacific,2000,63.8,82.5
+East Asia & Pacific,2005,62.1,81.8
+East Asia & Pacific,2010,61.0,80.7
+East Asia & Pacific,2015,60.2,79.5
+East Asia & Pacific,2017,59.8,79.0
+Sub-Saharan Africa,1990,62.5,83.2
+Sub-Saharan Africa,1995,62.8,83.0
+Sub-Saharan Africa,2000,63.1,82.8
+Sub-Saharan Africa,2005,63.3,82.5
+Sub-Saharan Africa,2010,63.4,82.1
+Sub-Saharan Africa,2015,63.8,81.8
+Sub-Saharan Africa,2017,64.1,81.5
+Latin America & Carib.,1990,39.8,82.1
+Latin America & Carib.,1995,42.3,81.5
+Latin America & Carib.,2000,45.1,80.9
+Latin America & Carib.,2005,48.2,80.2
+Latin America & Carib.,2010,51.5,79.5
+Latin America & Carib.,2015,53.2,78.8
+Latin America & Carib.,2017,53.6,78.5
+Mid. East & N. Africa,1990,23.8,74.2
+Mid. East & N. Africa,1995,22.1,73.5
+Mid. East & N. Africa,2000,21.5,72.8
+Mid. East & N. Africa,2005,20.8,72.0
+Mid. East & N. Africa,2010,20.1,71.5
+Mid. East & N. Africa,2015,19.8,70.9
+Mid. East & N. Africa,2017,19.5,70.5
+North America,1990,57.6,74.8
+North America,1995,57.9,74.2
+North America,2000,58.3,73.9
+North America,2005,57.5,73.1
+North America,2010,56.8,71.8
+North America,2015,56.1,70.9
+North America,2017,55.9,70.5
+Europe & Central Asia,1990,52.8,72.5
+Europe & Central Asia,1995,50.1,70.1
+Europe & Central Asia,2000,49.3,68.9
+Europe & Central Asia,2005,48.7,68.5
+Europe & Central Asia,2010,48.2,68.0
+Europe & Central Asia,2015,47.8,67.5
+Europe & Central Asia,2017,47.5,67.2

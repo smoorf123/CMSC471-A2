@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gender Equality in the Labor Force: White Hat vs. Black Hat</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body>
+    <div id="tooltip">
+      <div class="tt-hd" id="tt-hd"></div>
+      <div class="tt-row">
+        <span>Year</span> <span class="tt-val" id="tt-yr"></span>
+      </div>
+      <div class="tt-row">
+        <span>Male</span> <span class="tt-val" id="tt-m"></span>
+      </div>
+      <div class="tt-row">
+        <span>Female</span> <span class="tt-val" id="tt-f"></span>
+      </div>
+      <div class="tt-row">
+        <span>Gap</span> <span class="tt-val" id="tt-g"></span>
+      </div>
+    </div>
+
+    <header>
+      <h1>
+        Gender Equality in the Global Labor Force:<br />Two Perspectives on the
+        Same Data
+      </h1>
+      <p class="subtitle">
+        World Bank Gender Equality Indicators (1990&ndash;2017) - illustrating
+        how design choices can illuminate or distort the truth.
+      </p>
+      <div class="pill-group">
+        <span class="pill pill-blue">CMSC 471 &middot; Data Visualization</span>
+        <span class="pill pill-gray"
+          >Dataset: World Bank / ILO &middot; 2024</span
+        >
+      </div>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="#white-hat" class="wh-link">White Hat</a></li>
+        <li><a href="#black-hat" class="bh-link">Black Hat</a></li>
+        <li><a href="#references">References</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#ai-usage">AI Usage</a></li>
+        <li>
+          <a href="#extra-credit" class="ec-link">&#9733; Extra Credit</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="hero-stats">
+      <div class="hero-stat-card">
+        <div class="hero-stat-number stat-red" id="hs-largest">51.0 pp</div>
+        <div class="hero-stat-label">
+          Largest gap in 2017<br />(Middle East &amp; N. Africa)
+        </div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-number stat-green" id="hs-improved">+13.8 pp</div>
+        <div class="hero-stat-label">
+          Most improved since 1990<br />(Latin America &amp; Carib.)
+        </div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-number stat-blue" id="hs-global">28.1 pp</div>
+        <div class="hero-stat-label">
+          Global gender gap in 2017<br />(World average)
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats-note">
+      pp = percentage points &nbsp;&middot;&nbsp; Source: World Bank / ILO
+      modeled estimates, 1990&ndash;2017
+    </div>
+
+    <main>
+      <!-- WHITE HAT -->
+      <section id="white-hat">
+        <div class="section-header">
+          <span class="hat-badge white">White Hat</span>
+          <h2>
+            The Full Picture: Gender Gap in Global Labor Force Participation
+            (1990&ndash;2017)
+          </h2>
+        </div>
+
+        <div class="viz-container">
+          <div class="viz-title">
+            Labor Force Participation Rate by Sex and World Region,
+            1990&ndash;2017
+          </div>
+          <div class="viz-subtitle">
+            % of population ages 15+ in the labor market &middot; ILO modeled
+            estimates &middot; All panels share the same 0&ndash;90% scale for
+            fair comparison
+          </div>
+          <div class="legend">
+            <div class="legend-item">
+              <span class="leg-line" style="background: #2563eb"></span>Male
+              LFPR
+            </div>
+            <div class="legend-item">
+              <span class="leg-line" style="background: #ea580c"></span>Female
+              LFPR
+            </div>
+            <div class="legend-item">
+              <span class="leg-area" style="background: #ea580c"></span>Gender
+              gap (shaded)
+            </div>
+          </div>
+          <p class="framing-hint">
+            Hover any panel for exact values &nbsp;&middot;&nbsp; Click a panel
+            to focus &nbsp;&middot;&nbsp; Shaded area = gender gap
+          </p>
+          <div id="wh-grid"></div>
+          <div class="stats-bar" id="wh-stats"></div>
+          <div id="gap-rank"></div>
+          <div class="source-note">
+            <strong>Data:</strong> World Bank Gender Equality Indicators, ILO
+            modeled estimates (Nov. 2023). Regional aggregates are
+            population-weighted means. LFPR = Labor Force Participation Rate.
+            Gap = Male LFPR &minus; Female LFPR (pp).
+            <a
+              href="https://datacatalog.worldbank.org/search/dataset/0037654/gender-statistics"
+              target="_blank"
+              >datacatalog.worldbank.org</a
+            >
+          </div>
+        </div>
+
+        <div class="writeup">
+          <h3>Dataset</h3>
+          <p>
+            This visualization uses the World Bank's
+            <em>Gender Equality Indicators</em> - specifically the
+            <strong>Labor Force Participation Rate (LFPR)</strong>, the share of
+            the population ages 15+ that is employed or seeking employment.
+            Values are ILO modeled estimates harmonized across national surveys,
+            spanning 1990&ndash;2017 across seven World Bank regional
+            aggregates.
+          </p>
+
+          <h3>Design Choices</h3>
+          <ul>
+            <li>
+              <strong>Small multiples with a shared 0&ndash;90% y-axis:</strong>
+              The shared scale is the critical decision - region-specific axes
+              would equalize vastly different gaps (MENA ~51 pp vs. Sub-Saharan
+              Africa ~17 pp). The 90% ceiling avoids wasted space while
+              preserving the zero baseline.
+            </li>
+            <li>
+              <strong>Blue/orange color encoding:</strong> Maximally
+              distinguishable under deuteranopia. The orange gap area uses d3
+              female hue, semantically tying the shaded region to the
+              under-participating group.
+            </li>
+            <li>
+              <strong>Dot markers at measured years:</strong> The ILO data has
+              an irregular 2015&rarr;2017 interval. Markers make this cadence
+              visible and prevent a misleading impression of acceleration at the
+              end of the series.
+            </li>
+            <li>
+              <strong>Synchronized crosshair + click-to-focus:</strong> Hovering
+              draws a vertical rule across all seven panels simultaneously.
+              Clicking dims unfocused panels to 20% (not 0%), preserving spatial
+              context while enabling close study of one region.
+            </li>
+          </ul>
+
+          <h3>Data Transformations</h3>
+          <ul>
+            <li>
+              <strong>Gender gap (M &minus; F, pp):</strong> Used for gap
+              shading, in-panel labels, stat chips, and the ranking chart.
+            </li>
+            <li>
+              <strong>Female LFPR improvement 1990&rarr;2017:</strong>
+              Identifies the fastest-improving region for callout annotations.
+            </li>
+            <li>
+              <strong>Annualized gap trend (pp/decade):</strong>
+              <code
+                >((gap&#x2082;&#x2080;&#x2081;&#x2087; &minus;
+                gap&#x2081;&#x2099;&#x2099;&#x2080;) / 27) &times; 10</code
+              >. Green = narrowing, red = widening. Shown in the gap ranking
+              chart.
+            </li>
+          </ul>
+
+          <h3>Key Findings</h3>
+          <p>
+            <strong>MENA</strong> has the largest persistent gap (~51 pp) with
+            female participation actually <em>declining</em> since 1990.
+            <strong>Latin America &amp; the Caribbean</strong> shows the most
+            progress (+~14 pp female LFPR).
+            <strong>Sub-Saharan Africa</strong> has the smallest gap (~17 pp)
+            due to economic necessity driving both sexes into the labor force.
+            Globally, the gap narrowed only marginally over 27 years.
+          </p>
+
+          <h3>Transparency</h3>
+          <p>
+            ILO modeled estimates may differ from national statistics. Regional
+            aggregates obscure within-region variation (e.g., Gulf states vs.
+            North Africa within MENA). The y-axis starts at 0; domain,
+            methodology, and data source are cited in the caption.
+          </p>
+        </div>
+      </section>
+
+      <!-- BLACK HAT -->
+      <section id="black-hat">
+        <div class="section-header">
+          <span class="hat-badge black">Black Hat</span>
+          <h2>
+            Closing the Gap: Women's Workforce Participation Surges Toward
+            Historic Parity
+          </h2>
+        </div>
+
+        <div class="viz-container bh">
+          <div class="viz-title">
+            Gender Workforce Parity Index - Leading Regions Accelerate Toward
+            Equality (2000&ndash;2025)
+          </div>
+          <div class="viz-subtitle">
+            Index scores near 80 reflect substantial convergence in workforce
+            participation rates &middot; Dashed lines show trend-based
+            projection with 95% confidence interval
+          </div>
+          <div class="bh-overlay-wrap">
+            <div id="bh-viz"></div>
+            <div id="bh-overlay"></div>
+          </div>
+          <div class="source-note">
+            Source: World Bank Gender Equality Indicators / ILO modeled
+            estimates. Gender Workforce Parity Index = (Female LFPR &divide;
+            Male LFPR) &times; 100. Regions selected by highest 2017 Parity
+            Index score (n&nbsp;=&nbsp;3). Post-2017 values are linear trend
+            projections from the 2000&ndash;2017 slope; shaded band represents
+            &plusmn;1.5 SE estimated uncertainty.
+          </div>
+          <button id="bh-reveal">Reveal Deception Techniques</button>
+        </div>
+
+        <div class="writeup">
+          <h3>Overview</h3>
+          <p>
+            This is the <strong>black hat visualization</strong> - intentionally
+            designed to mislead. The following discloses every deceptive
+            technique used and why it works.
+          </p>
+
+          <h3>
+            Technique 1 - <em>Data Transformation:</em> Metric Substitution
+          </h3>
+          <p>
+            Raw LFPR values are replaced by a <em>Parity Index</em> = (female
+            &divide; male) &times; 100. This ratio erases magnitude: Sub-Saharan
+            Africa scores ~79 not due to gender equity, but because both sexes
+            participate at high rates from subsistence necessity. Its 79 score
+            hides a 17+ pp absolute gap. The formula is buried in the footnote
+            in technical language to lend false authority.
+          </p>
+
+          <h3>
+            Technique 2 -
+            <em>Data Transformation + Marks/Encodings:</em> Cherry-Picked Data
+          </h3>
+          <p>
+            Only the three regions with the <em>highest</em> 2017 Parity Index
+            are shown. MENA (index &asymp; 28) and Europe &amp; Central Asia
+            (index ~71, declining) are omitted. Their absence is invisible - no
+            empty slot marks them. The title phrase "Leading Regions" frames the
+            cherry-pick as editorial judgment.
+          </p>
+
+          <h3>
+            Technique 3 - <em>Marks/Encodings + Titles/Labels:</em> Truncated
+            Axis &amp; Shifted Goalpost
+          </h3>
+          <p>
+            The y-axis runs from <strong>50 to 83</strong>, tripling the visual
+            impression of Latin America's 12.6-point gain (appears ~38% of chart
+            height vs. the true 12.6%). A <strong>"Near Parity (80)"</strong>
+            reference line redefines equality downward by 20 points, making
+            regions at 78&ndash;79 appear nearly equal when they are 21 pp from
+            true parity.
+          </p>
+
+          <h3>
+            Technique 4 - <em>Marks/Encodings + Titles/Labels:</em> Fake
+            Confidence Band
+          </h3>
+          <p>
+            The shaded "95% confidence interval" uses
+            <code>width = i &times; 1.4</code> (array index), not any
+            statistical property. No interval was computed. The band and the
+            subtitle's "95% CI" claim signal rigor and discourage recomputation.
+          </p>
+
+          <h3>Non-Deceptive Choices</h3>
+          <ul>
+            <li>
+              <strong>Line chart:</strong> Conventional for time-series - looks
+              like authoritative economic reporting.
+            </li>
+            <li>
+              <strong>Distinct color palette:</strong> Signals methodological
+              care and professionalism.
+            </li>
+            <li>
+              <strong>No tooltip:</strong> A tooltip would expose exact index
+              values, letting viewers compute what 100 represents and
+              undermining Technique 3.
+            </li>
+          </ul>
+
+          <h3>Cumulative Effect</h3>
+          <p>
+            Each technique provides cover for the others: the ratio metric
+            diverts attention from the axis; the truncated axis amplifies
+            apparent gains; the fake band discourages recomputation; the shifted
+            goalpost makes the data appear close to equality. Together they
+            construct a convincing narrative of solved inequality - the
+            mechanism described by Correll &amp; Heer (2017).
+          </p>
+        </div>
+      </section>
+
+      <!-- REFERENCES -->
+      <section id="references">
+        <div class="section-header">
+          <h2>References &amp; Data Sources</h2>
+        </div>
+        <div class="writeup">
+          <ul class="ref-list">
+            <li>
+              World Bank. (2020).
+              <em>Gender Equality Indicators 1960&ndash;2017</em>.
+              <a
+                href="https://datacatalog.worldbank.org/dataset/gender-statistics"
+                target="_blank"
+                >datacatalog.worldbank.org</a
+              >
+            </li>
+            <li>
+              ILO. (2023). <em>ILO Modelled Estimates, November 2023</em>.
+              <a href="https://ilostat.ilo.org/data/" target="_blank"
+                >ilostat.ilo.org/data</a
+              >
+            </li>
+            <li>
+              Bostock, M., Ogievetsky, V., &amp; Heer, J. (2011). D&sup3;:
+              Data-Driven Documents.
+              <em>IEEE Trans. Vis. &amp; Comp. Graphics</em>.
+              <a href="https://d3js.org" target="_blank">d3js.org</a>
+            </li>
+            <li>
+              Cairo, A. (2019). <em>How Charts Lie</em>. W. W. Norton &amp;
+              Company.
+            </li>
+            <li>
+              Correll, M., &amp; Heer, J. (2017). Black Hat Visualization.
+              <em>IEEE VIS DECISIVe Workshop</em>.
+            </li>
+            <li>
+              Heer, J., &amp; Shneiderman, B. (2012). Interactive Dynamics for
+              Visual Analysis. <em>Queue, 10</em>(2).
+            </li>
+            <li>
+              Observable / D3 Gallery - Small Multiples.
+              <a
+                href="https://observablehq.com/@d3/small-multiples"
+                target="_blank"
+                >observablehq.com/@d3/small-multiples</a
+              >
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- PROCESS -->
+      <section id="process">
+        <div class="section-header">
+          <h2>Development Process</h2>
+        </div>
+        <div class="process-grid">
+          <div class="process-card">
+            <h4>Team &amp; Time</h4>
+            <p>
+              Two team members. Approximately
+              <strong>12&ndash;14 person-hours</strong> spanning dataset
+              exploration, D3 implementation, interaction design, write-up, and
+              deployment.
+            </p>
+          </div>
+          <div class="process-card">
+            <h4>Most Time-Consuming</h4>
+            <p>
+              Calibrating the black hat visualization to be
+              <strong>subtly</strong> deceptive, and implementing the
+              <strong>synchronized crosshair</strong> across seven independent
+              SVG panels via a shared <code>Map</code> of line references.
+            </p>
+          </div>
+          <div class="process-card">
+            <h4>D3 Challenges</h4>
+            <p>
+              Click-to-focus required coordinating transitions via a shared
+              closure variable (<code>activePanelReg</code>) and a
+              <code>cardEls</code> Map. The gap ranking chart chains two derived
+              transformations with
+              <code>d3.scaleSequential(d3.interpolateOranges)</code>.
+            </p>
+          </div>
+          <div class="process-card">
+            <h4>Key Decisions</h4>
+            <p>
+              Regional aggregates keep the white hat focused on macro trends.
+              The hero stats row anchors viewers before any chart is seen.
+              Callout badges use CSS absolute positioning to reflow correctly
+              with the responsive grid.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI USAGE -->
+      <section id="ai-usage">
+        <div class="section-header">
+          <h2>AI Usage</h2>
+        </div>
+        <div class="writeup">
+          <p>
+            AI assistance (Claude) was used in a limited, technical capacity during development.
+            Specifically, it was used to generate repetitive boilerplate - such as SVG axis and
+            gridline setup, CSS reset rules, and HTML structural scaffolding - where the patterns
+            are well-established and writing them by hand would not have contributed to the design
+            or analytical work of the assignment. All visualization design decisions, deception
+            technique selection, data transformation logic, and write-up content were authored
+            independently.
+          </p>
+        </div>
+      </section>
+
+      <!-- EXTRA CREDIT -->
+      <section id="extra-credit">
+        <div class="section-header">
+          <span class="ec-badge">&#9733; Extra Credit Features</span>
+          <h2>
+            Enhanced Interaction Design, Visual Encoding &amp; Narrative
+            Structure
+          </h2>
+        </div>
+
+        <div class="ec-grid">
+          <div class="ec-card">
+            <span class="ec-badge">Interaction Design</span>
+            <h4>Synchronized Crosshair</h4>
+            <p>
+              Hovering any panel draws a vertical rule at the same year across
+              <strong>all seven panels</strong>, eliminating the cognitive load
+              of tracking a year position across panels. Each SVG holds a hidden
+              <code>&lt;line class="crosshair"&gt;</code>; all references live
+              in a <code>crosshairLines</code> Map updated atomically on
+              <code>mousemove</code>.
+            </p>
+            <h4>Click-to-Focus Panel Isolation</h4>
+            <p>
+              Clicking a panel dims the other six to 20% opacity and highlights
+              the selection with a blue border. A shared
+              <code>activePanelReg</code> variable and D3
+              <code>.transition(200ms)</code> keep state coordinated. Stat chips
+              below the grid also trigger focus.
+            </p>
+            <h4>Black Hat "Reveal Deceptions" Toggle</h4>
+            <p>
+              A button toggles four amber callout badges over each deceptive
+              element via a CSS class toggle on a
+              <code>pointer-events:none</code> overlay. Viewers see the chart
+              naturally first, then activate annotations to see exactly where
+              each deception is applied.
+            </p>
+          </div>
+
+          <div class="ec-card">
+            <span class="ec-badge">Visual Encoding</span>
+            <h4>Gap Ranking Bar Chart</h4>
+            <p>
+              Ranks all seven regions by 2017 gender gap using two chained
+              derivations: (1) compute gap, (2) sort ascending. Bar color uses
+              d3.scaleSequential(d3.interpolateOranges) for a perceptually
+              ordered palette. Complements the small multiples by making
+              cross-regional comparison preattentive (position + hue).
+            </p>
+            <h4>Narrative Callout Annotations</h4>
+            <p>
+              Three panels carry data-driven color-coded badges:
+              <strong style="color: #991b1b">red</strong> on MENA,
+              <strong style="color: #065f46">green</strong> on LAC,
+              <strong style="color: #374151">gray</strong> on World. Colors
+              follow a stop/go convention reinforced by font weight and border,
+              not color alone.
+            </p>
+          </div>
+
+          <div class="ec-card">
+            <span class="ec-badge">Narrative Structure</span>
+            <h4>Hero Stats Row</h4>
+            <p>
+              A full-width strip before the charts shows three anchoring
+              statistics (51 pp largest gap; +13.8 pp most improved; 28.1 pp
+              global), implementing Shneiderman's
+              <em>Overview First</em> principle. Viewers form a scale anchor
+              before seeing any chart, preventing the misreading that all
+              regional progress looks equivalent.
+            </p>
+            <h4>Framing Instruction Bar</h4>
+            <p>
+              A single italic line above the grid covers all three interaction
+              modes in one sentence, removing the discoverability barrier
+              without cluttering the visualization. Styled as a left-bordered
+              pale-blue block - distinct from data but quieter than a button.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        CMSC 471 &middot; Data Visualization &middot; Gender Equality Indicators
+        (World Bank / ILO, 1990&ndash;2017) &middot; 2024
+      </p>
+    </footer>
+
+    <script src="data/data.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
